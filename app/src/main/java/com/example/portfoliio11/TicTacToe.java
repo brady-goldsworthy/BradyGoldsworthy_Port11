@@ -138,4 +138,16 @@ public class TicTacToe
         return isBoardFull() || (whoWon() > 0);
     }
 
+    public String result() {
+        if (whoWon() > 0 ) { //Sombody won the game
+            return "Player" + whoWon() + " won!";
+        }
+        else if (isBoardFull()) {
+            return "It's a Tie!";
+        }
+        else {
+            return "Bonne Chance!";
+        }
+    } //end of result method
+
 }//end of TicTacToe class

@@ -1,12 +1,15 @@
 package com.example.portfoliio11;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -14,6 +17,8 @@ public class MainActivity extends Activity {
     private Button[][] buttons;
 
     private TicTacToe game;
+
+    private TextView banner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +47,7 @@ public class MainActivity extends Activity {
         GridLayout gridLayout = new GridLayout(this);
 
         //Set rows and cols of grid
-        gridLayout.setRowCount(TicTacToe.SIDE);
+        gridLayout.setRowCount(TicTacToe.SIDE + 1); //Version 4 includes row for banner
         gridLayout.setColumnCount(TicTacToe.SIDE);
 
         //Create 2D array of buttons
@@ -66,6 +71,27 @@ public class MainActivity extends Activity {
                 gridLayout.addView(buttons[row][col], width, width); //button is a width x width square
             }
         }
+
+        //Create textview for banner
+        banner = new TextView(this);
+
+        //Set the size for the textview
+        GridLayout.Spec rowSpec = GridLayout.spec(TicTacToe.SIDE, 1);
+        GridLayout.Spec colSpec = GridLayout.spec(0, TicTacToe.SIDE);
+
+        GridLayout.LayoutParams layoutParamsBanner = new GridLayout.LayoutParams(rowSpec, colSpec);
+
+        //attach the layout params to the textview
+        banner.setLayoutParams(layoutParamsBanner);
+
+        banner.setWidth(TicTacToe.SIDE * width);
+        banner.setHeight(width);
+
+        //Center the textView
+        banner.setGravity(Gravity.CENTER);
+
+        banner.setBackgroundColor(Color.LTGRAY);
+
 
         setContentView(gridLayout); //Render button array
 
@@ -122,14 +148,13 @@ public class MainActivity extends Activity {
 
     } //end update
 
+
     public void enableButtons(boolean enabled) {
         for (int row = 0; row < TicTacToe.SIDE; row++) {
             for (int col = 0; col < TicTacToe.SIDE; col++) {
                 buttons[row][col].setEnabled(enabled);
-
             }
         }
-
     }
 
 
