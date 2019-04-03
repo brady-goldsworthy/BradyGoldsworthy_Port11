@@ -1,6 +1,8 @@
 package com.example.portfoliio11;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
@@ -92,6 +94,13 @@ public class MainActivity extends Activity {
 
         banner.setBackgroundColor(Color.LTGRAY);
 
+        //Set text size and text
+        banner.setTextSize((int) (width * 0.05));
+
+        banner.setText(game.result());
+
+        //add banner to grid layout
+        gridLayout.addView(banner);
 
         setContentView(gridLayout); //Render button array
 
@@ -127,7 +136,7 @@ public class MainActivity extends Activity {
 
     public void update(int row, int col) {
         //Display message on update
-        Toast.makeText(this, "Button updated, row: " + row + " col: " + col, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Button updated, row: " + row + " col: " + col, Toast.LENGTH_SHORT).show();
 
         //find the current player
         int currentPlayer = game.play(row, col);
@@ -142,7 +151,15 @@ public class MainActivity extends Activity {
 
         //check if game is over
         if (game.isGameOver()) {
+            //Change background color of the textView
+            banner.setBackgroundColor(Color.CYAN);
+
+            //Update banner text
+            banner.setText(game.result());
+
             enableButtons(false);
+
+            showNewGameDialog();
         }
 
 
@@ -156,6 +173,48 @@ public class MainActivity extends Activity {
             }
         }
     }
+
+    public void showNewGameDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Tic Tac Toe");
+        alert.setMessage("Start a new game?");
+
+        //Create positive message
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //reset game
+                game.resetGame();
+
+                //and re enable buttons
+                enableButtons(true);
+                clearBoard();
+
+                banner.setBackgroundColor(Color.LTGRAY);
+                banner.setText(game.result());
+            }
+        });
+
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MainActivity.this.finish(); //close application
+            }
+        });
+
+        alert.show(); //display dialog
+
+    } //End newGameDialog
+
+    public void clearBoard() {
+        for (int row = 0; row < TicTacToe.SIDE; row++) {
+            for (int col = 0; col < TicTacToe.SIDE; col++) {
+                buttons[row][col].setText("");
+            }
+        }
+    }
+
 
 
 }
